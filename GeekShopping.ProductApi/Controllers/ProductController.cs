@@ -56,7 +56,7 @@ namespace GeekShopping.ProductApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var product = await repos.FindById(id);
+            var product = await repos.Delete(id);
 
             if (product == null) return BadRequest();
 

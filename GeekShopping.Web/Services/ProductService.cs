@@ -1,7 +1,6 @@
 ﻿using GeekShopping.Web.Models;
 using GeekShopping.Web.Services.IServices;
 using GeekShopping.Web.Utils;
-using System.Reflection;
 
 namespace GeekShopping.Web.Services;
 
@@ -12,8 +11,9 @@ public class ProductService : IProductService
 
     public ProductService(HttpClient client)
     {
-        this.client = client ?? new HttpClient();
+        this.client = client ?? throw new ArgumentNullException(nameof(client));
     }
+
     public async Task<ProductModel> CreateProduct(ProductModel model)
     {
         var response = await client.PostAsJson(BasePath, model);
@@ -25,8 +25,8 @@ public class ProductService : IProductService
     public async Task<bool> DeleteProductById(Guid id)
     {
         var response = await client.DeleteAsync($"{BasePath}/{id}");
-        if (response.IsSuccessStatusCode) return await response.ReadContentAs<bool>();
-
+        if(response.IsSuccessStatusCode)
+            return await response.ReadContentAs<bool>();
         else throw new Exception("Something went wrong when calling API");
 
     }
