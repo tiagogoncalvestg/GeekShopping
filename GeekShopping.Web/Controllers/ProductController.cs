@@ -1,9 +1,12 @@
 ﻿using GeekShopping.Web.Models;
+using GeekShopping.Web.Services.ClientExtensions;
 using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace GeekShopping.Web.Controllers
@@ -12,14 +15,24 @@ namespace GeekShopping.Web.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductController(IProductService productService)
+        private readonly IProductService2 _productService2;
+
+        private readonly Client client = new("https://localhost:7195", new HttpClient());
+
+        public ProductController(IProductService productService, IProductService2 productService2)
         {
+            _productService2 = productService2;
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         }
 
         public async Task<IActionResult> ProductIndex()
         {
-            var products = await _productService.FindAllProducts();
+            //var products = await _productService.FindAllProducts();
+
+            // _productService2 aponta para interface não implementada criada para o refit
+            //var products = await _productService2.FindAllProducts();
+
+            var products = await client.ProductAllAsync();
             return View(products);
         }
 
@@ -50,9 +63,20 @@ namespace GeekShopping.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductUpdate(ProductModel model)
         {
+            ProductDto productDto = new();
+            productDto.Id = model.Id;
+            productDto.Name = model.Name;
+            productDto.Price = (double)model.Price;
+            productDto.CategoryName = model.CategoryName;
+            productDto.ImageURL = model.ImageURL;
+            productDto.Description = model.Description;
+
             if (ModelState.IsValid)
             {
-                var response = await _productService.UpdateProduct(model);
+                //var response = await _productService.UpdateProduct(model);
+
+                //Nswag
+                var response = await client.ProductPUTAsync(productDto);
                 if (response != null) return RedirectToAction(
                      nameof(ProductIndex));
             }

@@ -1,5 +1,6 @@
 using GeekShopping.Web.Services;
 using GeekShopping.Web.Services.IServices;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IProductService, ProductService>(
         c => c.BaseAddress = new Uri(builder.Configuration["ServicesUrl:ProductAPI"])
     );
+
+// Refit
+builder.Services.AddRefitClient<IProductService2>().ConfigureHttpClient(
+        c => c.BaseAddress = new Uri(builder.Configuration["ServicesUrl:ProductAPI"]));
 
 var app = builder.Build();
 

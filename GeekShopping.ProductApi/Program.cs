@@ -1,7 +1,9 @@
 using AutoMapper;
 using GeekShopping.ProductApi.Config;
 using GeekShopping.ProductApi.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Refit;
 using MyContext = GeekShopping.ProductApi.Models.Contexts.MyContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddDbContext<MyContext>(opt => opt.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
