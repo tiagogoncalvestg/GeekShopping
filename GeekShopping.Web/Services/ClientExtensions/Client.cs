@@ -20,12 +20,11 @@ using System = global::System;
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class Client
 {
-    
     private string _baseUrl = "";
     private System.Net.Http.HttpClient _httpClient;
     private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-    public Client(string baseUrl, System.Net.Http.HttpClient httpClient)
+    public Client(System.Net.Http.HttpClient httpClient, string baseUrl)
     {
         _baseUrl = baseUrl;
         _httpClient = httpClient;
