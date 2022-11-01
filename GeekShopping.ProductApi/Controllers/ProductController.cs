@@ -1,5 +1,8 @@
 ﻿using GeekShopping.ProductApi.Data.Dtos;
 using GeekShopping.ProductApi.Repositories;
+using GeekShopping.ProductApi.Utils;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeekShopping.ProductApi.Controllers
@@ -15,6 +18,7 @@ namespace GeekShopping.ProductApi.Controllers
             this.repos = repos ?? throw new ArgumentNullException(nameof(repos));
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> FindById(Guid id)
         {
@@ -33,6 +37,7 @@ namespace GeekShopping.ProductApi.Controllers
             return Ok(products);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ProductDto>> Create([FromBody] ProductDto productDto)
         {
@@ -43,6 +48,7 @@ namespace GeekShopping.ProductApi.Controllers
             return Ok(product);
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<ProductDto>> Update([FromBody] ProductDto productDto)
         {
@@ -53,6 +59,7 @@ namespace GeekShopping.ProductApi.Controllers
             return Ok(product);
         }
 
+        [Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
