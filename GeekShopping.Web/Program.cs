@@ -28,6 +28,9 @@ builder.Services.AddAuthentication(options => {
         opt.SaveTokens = true;
     });
 
+builder.Services.AddHttpClient<ICartService, CartService>(
+        c => c.BaseAddress = new Uri(builder.Configuration["ServicesUrl:CartAPI"])
+    );
 builder.Services.AddHttpClient<IProductService, ProductService>(
         c => c.BaseAddress = new Uri(builder.Configuration["ServicesUrl:ProductAPI"])
     );
