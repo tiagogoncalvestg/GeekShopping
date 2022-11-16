@@ -11,13 +11,11 @@ namespace GeekShopping.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService, 
+        public HomeController(IProductService productService, 
             ICartService cartService)
         {
             _productService = productService;
-            _logger = logger;
             _cartService = cartService;
         }
 
@@ -50,6 +48,7 @@ namespace GeekShopping.Web.Controllers
                     CouponCode = "",
                     UserId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value
                 }
+                
             };
 
             CartDetailViewModel cartDetail = new()
@@ -61,12 +60,10 @@ namespace GeekShopping.Web.Controllers
                 Product = await _productService.FindProductById(model.Id, token),
                 
                 Count = model.Count
-
             };
 
-            List<CartDetailViewModel> cartDetails = new();
+            List<CartDetailViewModel> cartDetails = new List<CartDetailViewModel>();
             cartDetails.Add(cartDetail);
-
             cart.CartDetails = cartDetails;
 
             var response = await _cartService.AddItemToCart(cart, token);

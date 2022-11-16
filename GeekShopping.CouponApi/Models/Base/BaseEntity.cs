@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GeekShopping.CartApi.Models.Base;
+namespace GeekShopping.CouponApi.Models.Base;
 
 public class BaseEntity
 {

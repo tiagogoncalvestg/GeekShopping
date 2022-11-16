@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GeekShopping.CartAPI.Model
+﻿namespace GeekShopping.CartAPI.Model
 {
     public class Cart
     {

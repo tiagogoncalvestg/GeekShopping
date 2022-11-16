@@ -15,10 +15,10 @@ public class CartController : ControllerBase
         this.repos = repos ?? throw new ArgumentNullException(nameof(repos));
     }
 
-    [HttpGet("find-cart/{id}")]
-    public async Task<ActionResult<CartDto>> FindById(Guid id)
+    [HttpGet("find-cart/{userId}")]
+    public async Task<ActionResult<CartDto>> FindById(string userId)
     {
-        var cart = await repos.FindCartByUserId(id);
+        var cart = await repos.FindCartByUserId(userId);
 
         if (cart == null) return NotFound();
 
@@ -26,7 +26,7 @@ public class CartController : ControllerBase
     }
 
     [HttpPost("add-cart")]
-    public async Task<ActionResult<CartDto>> AddCart([FromBody] CartDto cartDto)
+    public async Task<ActionResult<CartDto>> AddCart(CartDto cartDto)
     {
         var cart = await repos.SaveOrUpdateCart(cartDto);
 
@@ -35,8 +35,28 @@ public class CartController : ControllerBase
         return Ok(cart);
     }
 
+    [HttpPost("apply-coupon")]
+    public async Task<ActionResult<CartDto>> ApplyCoupon(CartDto cartDto)
+    {
+        var status = await repos.ApplyCoupon(cartDto.CartHeader.UserId, cartDto.CartHeader.CouponCode);
+
+        if (!status) return NotFound();
+
+        return Ok(status);
+    }
+
+    [HttpDelete("remove-coupon/{userId}")]
+    public async Task<ActionResult<CartDto>> RemoveCoupon(string userId)
+    {
+        var status = await repos.RemoveCoupon(userId);
+
+        if (!status) return NotFound();
+
+        return Ok(status);
+    }
+
     [HttpPut("update-cart")]
-    public async Task<ActionResult<CartDto>> UpdateCart([FromBody] CartDto cartDto)
+    public async Task<ActionResult<CartDto>> UpdateCart(CartDto cartDto)
     {
         var cart = await repos.SaveOrUpdateCart(cartDto);
 
