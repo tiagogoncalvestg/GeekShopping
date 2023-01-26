@@ -108,7 +108,7 @@ public class MyContext : DbContext
             Name = "Camiseta Goku Fases",
             Price = new decimal(59.99),
             Description = "",
-            ImageURL = "https://github.com/leandrocgsi/erudio-microservices-dotnet6/blob/main/ShoppingImages/13_dragon_ball.jpg",
+            ImageURL = "https://github.com/leandrocgsi/erudio-microservices-dotnet6/blob/main/ShoppingImages/13_dragon_ball.jpg?raw=true",
             CategoryName = "T-shirt"
         });
     }
