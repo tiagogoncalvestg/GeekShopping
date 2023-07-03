@@ -76,7 +76,7 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
-builder.Services.AddDbContext<MyContext>(opt => opt.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+builder.Services.AddDbContext<MyContext>(opt => opt.UseSqlite("name=ConnectionStrings:DefaultConnection"));
 
 
 //// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -46,8 +46,8 @@ public class ProductRepos : IProductRepos
 
     public async Task<IEnumerable<ProductDto>> FindAll()
     {
-        List<Product> products = await context.Products.ToListAsync();
-        return mapper.Map<List<ProductDto>>(products);
+        IEnumerable<Product> products = await context.Products.ToListAsync();
+        return mapper.Map<IEnumerable<ProductDto>>(products);
     }
 
     public async Task<ProductDto> FindById(Guid id)

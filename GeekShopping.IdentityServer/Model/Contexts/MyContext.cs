@@ -8,6 +8,6 @@ public class MyContext : IdentityDbContext<ApplicationUser>
 {
 	public MyContext(DbContextOptions<MyContext> options) : base(options)
 	{
-
+		Database.EnsureCreated();
 	}
 }
