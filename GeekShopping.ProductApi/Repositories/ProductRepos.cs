@@ -19,8 +19,10 @@ public class ProductRepos : IProductRepos
     public async Task<ProductDto> Create(ProductDto productDto)
     {
         var product = mapper.Map<Product>(productDto);
+
         context.Products.Add(product);
         await context.SaveChangesAsync();
+
         return mapper.Map<ProductDto>(product);
     }
 
@@ -39,7 +41,6 @@ public class ProductRepos : IProductRepos
         }
         catch (Exception)
         {
-
             return false;
         }
     }
@@ -59,8 +60,10 @@ public class ProductRepos : IProductRepos
     public async Task<ProductDto> Update(ProductDto productDto)
     {
         var product = mapper.Map<Product>(productDto);
+
         context.Products.Update(product);
         await context.SaveChangesAsync();
+
         return mapper.Map<ProductDto>(product);
     }
 }

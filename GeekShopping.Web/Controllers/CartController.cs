@@ -57,6 +57,11 @@ namespace GeekShopping.Web.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Checkout()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Remove(Guid id)
         {
             var token = await HttpContext.GetTokenAsync("access_token");
@@ -77,14 +82,22 @@ namespace GeekShopping.Web.Controllers
             var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value;
 
             var response = await _cartService.FindCartByUserId(userId, token);
+
+            decimal purchaseAmount = 0;
             if (response?.CartHeader != null)
             {
                 foreach (var detail in response.CartDetails)
                 {
-                    response.CartHeader.PurchaseAmount += detail.Product.Price * detail.Count;
+                    purchaseAmount += detail.Price;
+                }
+
+                if(response.CartHeader.CouponCode != null)
+                {
+
                 }
             }
 
+            response.CartHeader.PurchaseAmount = purchaseAmount;
             return response;
         }
     }

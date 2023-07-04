@@ -22,6 +22,11 @@ public class CartController : ControllerBase
 
         if (cart == null) return NotFound();
 
+        foreach (var item in cart.CartDetails)
+        {
+            item.Price = item.Product.Price * item.Count;
+        }        
+
         return Ok(cart);
     }
 

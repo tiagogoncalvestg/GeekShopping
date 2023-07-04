@@ -3,6 +3,7 @@ using GeekShopping.CartApi.Models.Contexts;
 using GeekShopping.CartAPI.Data.Dtos;
 using GeekShopping.CartAPI.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace GeekShopping.CartApi.Repositories
 {
@@ -23,8 +24,10 @@ namespace GeekShopping.CartApi.Repositories
             if (header != null)
             {
                 header.CouponCode = couponCode;
+
                 context.CartHeaders.Update(header);
                 await context.SaveChangesAsync();
+
                 return true;
             }
             return false;
@@ -34,11 +37,14 @@ namespace GeekShopping.CartApi.Repositories
         {
             var cartHeader = await context.CartHeaders
                         .FirstOrDefaultAsync(c => c.UserId == userId);
+
             if (cartHeader != null)
             {
                 context.CartDetails.RemoveRange(context.CartDetails.Where(c => c.CartHeaderId.Equals(cartHeader.Id)));
+
                 context.CartHeaders.Remove(cartHeader);
                 await context.SaveChangesAsync();
+
                 return true;
             }
             return false;
@@ -79,10 +85,13 @@ namespace GeekShopping.CartApi.Repositories
             if (header != null)
             {
                 header.CouponCode = "";
+
                 context.CartHeaders.Update(header);
                 await context.SaveChangesAsync();
+
                 return true;
             }
+
             return false;
         }
 
@@ -101,13 +110,12 @@ namespace GeekShopping.CartApi.Repositories
                         .FirstOrDefaultAsync(c => c.Id.Equals(cartDetail.CartHeaderId));
                     context.CartHeaders.Remove(cartHeaderToRemove);
                 }
+
                 await context.SaveChangesAsync();
                 return true;
-
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -115,6 +123,7 @@ namespace GeekShopping.CartApi.Repositories
         public async Task<CartDto> SaveOrUpdateCart(CartDto cartDto)
         {
             Cart cart = mapper.Map<Cart>(cartDto);
+
             //Checks if the product is already saved in the database if it does not exist then save
             var product = await context.Products.FirstOrDefaultAsync(
                 p => p.Id == cartDto.CartDetails.FirstOrDefault().ProductId);
@@ -126,7 +135,6 @@ namespace GeekShopping.CartApi.Repositories
             }
 
             //Check if CartHeader is null
-
             var cartHeader = await context.CartHeaders.AsNoTracking().FirstOrDefaultAsync(
                 c => c.UserId == cart.CartHeader.UserId);
 
@@ -135,8 +143,10 @@ namespace GeekShopping.CartApi.Repositories
                 //Create CartHeader and CartDetails
                 context.CartHeaders.Add(cart.CartHeader);
                 await context.SaveChangesAsync();
+
                 cart.CartDetails.FirstOrDefault().CartHeaderId = cart.CartHeader.Id;
                 cart.CartDetails.FirstOrDefault().Product = null;
+
                 context.CartDetails.Add(cart.CartDetails.FirstOrDefault());
                 await context.SaveChangesAsync();
             }
@@ -152,22 +162,32 @@ namespace GeekShopping.CartApi.Repositories
                 {
                     //Create CartDetails new cart....
                     cartDetail = new();
+                    int count = cart.CartDetails.FirstOrDefault().Count;
+                    decimal price = (decimal)cart.CartDetails.FirstOrDefault().Product.Price;
+
                     cartDetail.CartHeaderId = cartHeader.Id;
                     cartDetail.ProductId = cart.CartDetails.FirstOrDefault().ProductId;
                     cartDetail.Count = cart.CartDetails.FirstOrDefault().Count;
-                    //cart.CartDetails.FirstOrDefault().Product = product;
+                    cartDetail.Price = count * price;
+
                     context.CartDetails.Add(cartDetail);
                     await context.SaveChangesAsync();
                 }
                 else
                 {
                     //Update product count and CartDetails
+                    int count = cart.CartDetails.FirstOrDefault().Count;
+                    decimal price = (decimal) cart.CartDetails.FirstOrDefault().Product.Price;
+
                     cartDetail.Product = null;
+                    cartDetail.Price = price * count;
                     cartDetail.Count = cart.CartDetails.FirstOrDefault().Count;
+
                     context.CartDetails.Update(cartDetail);
                     await context.SaveChangesAsync();
                 }
             }
+
             return mapper.Map<CartDto>(cart);
         }
     }

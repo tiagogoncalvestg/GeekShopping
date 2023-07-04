@@ -2,7 +2,6 @@
 using GeekShopping.ProductApi.Repositories;
 using GeekShopping.ProductApi.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeekShopping.ProductApi.Controllers
