@@ -333,22 +333,22 @@ namespace IdentityServerHost.Quickstart.UI
                             }
 
                             // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                            return Redirect(model.ReturnUrl);
+                            return Redirect("https://localhost:4430");
                         }
 
                         // request for a local page
                         if (Url.IsLocalUrl(model.ReturnUrl))
                         {
-                            return Redirect(model.ReturnUrl);
+                            return Redirect("https://localhost:4430");
                         }
                         else if (string.IsNullOrEmpty(model.ReturnUrl))
                         {
-                            return Redirect("~/");
+                            return Redirect("https://localhost:4430");
                         }
                         else
                         {
                             // user might have clicked on a malicious link - should be logged
-                            throw new Exception("invalid return URL");
+                            return Redirect("https://localhost:4430");
                         }
                     }
 
@@ -356,7 +356,7 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return Redirect("https://localhost:4430");
         }
 
         private async Task<RegisterViewModel> BuildRegisterViewModelAsync(string returnUrl)
