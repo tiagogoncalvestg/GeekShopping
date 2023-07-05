@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  front:
+    build:
+        context: ./FrontEnd/
+        dockerfile: ./GeekShopping.Web/Dockerfile
+  
+  cartapi:
+    build:
+        context: ./Services/CartApi/
+        dockerfile: ./GeekShopping.CartApi/Dockerfile
+        
+  couponapi:
+    build:
+        context: ./Services/CouponApi/
+        dockerfile: ./GeekShopping.CouponApi/Dockerfile
+        
+  identityserver:
+    build:
+        context: ./Services/IdentityServer/
+        dockerfile: ./GeekShopping.IdentityServer/Dockerfile  
+
+  productapi:
+    build:
+        context: ./Services/ProductApi/
+        dockerfile: ./GeekShopping.ProductApi/Dockerfile  
