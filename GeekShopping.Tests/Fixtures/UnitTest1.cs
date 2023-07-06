@@ -1,3 +1,4 @@
+using GeekShopping.Tests.Models;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -7,9 +8,13 @@ namespace GeekShopping.Tests.Fixtures;
 public class Tests
 {
     IWebDriver _driver = new ChromeDriver();
+    AppUser appUser;
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() { }
+    public void OneTimeSetUp() 
+    {
+        appUser = AppUser.GenerateUser();
+    }
     [SetUp]
     public void Setup() { }
     [TearDown]
@@ -34,16 +39,26 @@ public class Tests
     [Test, Order(200)]
     public void RegisterNewUser()
     {
-        _driver.Url = "https://localhost:4435/account/register";
+        _driver.Url = "https://localhost:4430";
+        _driver.Manage().Window.Maximize();
 
-        _driver.FindElement(By.Id("Username")).SendKeys("UsuárioTeste");
-        _driver.FindElement(By.Id("Email")).SendKeys("usuarioteste@test.com");
-        _driver.FindElement(By.Id("FirstName")).SendKeys("Usuario");
-        _driver.FindElement(By.Id("LastName")).SendKeys("Teste");
-        _driver.FindElement(By.Id("Password")).SendKeys("Test@r1234");
-        _driver.FindElement(By.XPath("//*[@id=\"RoleName\"]")).Click();
-        _driver.FindElement(By.XPath("/html/body/div[2]/div/div[3]/div/div/div[2]/form/div[6]/select/option[2]")).Click();
+        _driver.FindElement(By.LinkText("Login")).Click();
+        _driver.FindElement(By.PartialLinkText("Create Account")).Click();
 
-        _driver.FindElement(By.XPath("/html/body/div[2]/div/div[3]/div/div/div[2]/form/button[1]")).Click();
+        _driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
+        _driver.FindElement(By.Id("Email")).SendKeys(appUser.Email);
+        _driver.FindElement(By.Id("FirstName")).SendKeys(appUser.FirstName);
+        _driver.FindElement(By.Id("LastName")).SendKeys(appUser.LastName);
+        _driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
+
+        var registerBtn = _driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
+
+        IJavaScriptExecutor js = (IJavaScriptExecutor)_driver; 
+        js.ExecuteScript("arguments[0].scrollIntoView(true);", registerBtn);
+
+        //var elem = _driver.FindElement(By.ClassName("something"));
+        //_driver.ExecuteScript("arguments[0].scrollIntoView(true);", elem);
+
+        _driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]")).Click();
     }
 }

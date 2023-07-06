@@ -1,13 +1,30 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mypod
+  name: pod-front
   labels:
-    name: mypod
+    name: pod-front
 spec:
   containers:
-  - name: geek_shopping_front
-    image: geek_shopping_front
+  - name: storeoncontainer
+    image: srtg/storeoncontainer:1.0
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-productservice
+  labels:
+    name: pod-productservice
+spec:
+  containers:
+  - name: geekshopping-productapi
+    image: srtg/geekshopping-productapi:latest
     resources:
       limits:
         memory: "128Mi"

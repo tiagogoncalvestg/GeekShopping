@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myreplicaset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mystore
+  template:
+    metadata:
+      labels:
+        app: mystore
+    spec:
+      containers:
+      - name: storeoncontainer
+        image: srtg/storeoncontainer:1.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 80
