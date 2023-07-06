@@ -56,9 +56,6 @@ public class Tests
         IJavaScriptExecutor js = (IJavaScriptExecutor)_driver; 
         js.ExecuteScript("arguments[0].scrollIntoView(true);", registerBtn);
 
-        //var elem = _driver.FindElement(By.ClassName("something"));
-        //_driver.ExecuteScript("arguments[0].scrollIntoView(true);", elem);
-
-        _driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]")).Click();
+        registerBtn.Click();
     }
 }
