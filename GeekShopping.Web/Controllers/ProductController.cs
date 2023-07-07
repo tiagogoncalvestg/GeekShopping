@@ -36,10 +36,6 @@ public class ProductController : Controller
     {
         var token = await HttpContext.GetTokenAsync("access_token");
         client = new(httpClient, config.GetSection("ServicesUrl").GetSection("ProductAPI").Value);
-        //var products = await _productService.FindAllProducts(token);
-
-        //_productService2 aponta para interface não implementada criada para o refit
-        //var products = await _productService2.FindAllProducts(token);
 
         var products = await client.ProductAllAsync(token);
         return View(products);
@@ -87,10 +83,8 @@ public class ProductController : Controller
         if (ModelState.IsValid)
         {
             var token = await HttpContext.GetTokenAsync("access_token");
-            var response = await _productService.UpdateProduct(model, token);
 
-            //Nswag
-            //var response = await client.ProductPUTAsync(productDto, token);
+            var response = await _productService.UpdateProduct(model, token);
             if (response != null) return RedirectToAction(
                  nameof(ProductIndex));
         }
@@ -101,6 +95,7 @@ public class ProductController : Controller
     public async Task<IActionResult> ProductDelete(Guid id)
     {
         var token = await HttpContext.GetTokenAsync("access_token");
+
         var model = await _productService.FindProductById(id, token);
         if (model != null) return View(model);
         return NotFound();
@@ -111,6 +106,7 @@ public class ProductController : Controller
     public async Task<IActionResult> ProductDelete(ProductViewModel model)
     {
         var token = await HttpContext.GetTokenAsync("access_token");
+
         var response = await _productService.DeleteProductById(model.Id, token);
         if (response) return RedirectToAction(
                 nameof(ProductIndex));

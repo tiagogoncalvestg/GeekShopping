@@ -10,10 +10,12 @@ namespace GeekShopping.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
+        private readonly ICouponService _couponService;
 
         public CartController(IProductService productService,
-            ICartService cartService)
+            ICartService cartService, ICouponService couponService)
         {
+            _couponService = couponService;
             _productService = productService;
             _cartService = cartService;
         }
@@ -21,7 +23,7 @@ namespace GeekShopping.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-            
+
             return View(await FindUserCart());
         }
 
@@ -32,12 +34,18 @@ namespace GeekShopping.Web.Controllers
             var token = await HttpContext.GetTokenAsync("access_token");
             var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value;
 
-            var response = await _cartService.ApplyCoupon(model, token);
-            if (response)
+            var coupon = await _couponService.GetCoupon(model.CartHeader.CouponCode, token);
+
+            if(coupon != null)
             {
-                return RedirectToAction(nameof(CartIndex));
+                var response = await _cartService.ApplyCoupon(model, token);
+                if (response)
+                {
+                    return RedirectToAction(nameof(CartIndex));
+                }
             }
 
+            model.CartHeader.CouponCode = "";
             return View();
         }
 
@@ -91,9 +99,17 @@ namespace GeekShopping.Web.Controllers
                     purchaseAmount += detail.Price;
                 }
 
-                if(response.CartHeader.CouponCode != null)
+                if (response.CartHeader.CouponCode != null)
                 {
-
+                    var coupon = await _couponService.GetCoupon(response.CartHeader.CouponCode, token); 
+                    if (coupon.CouponCode != null)
+                    {
+                        purchaseAmount = purchaseAmount - (purchaseAmount * coupon.DiscountAmount);
+                    }
+                    else
+                    {
+                        response.CartHeader.CouponCode = "";
+                    }
                 }
             }
 

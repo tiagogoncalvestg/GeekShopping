@@ -1,6 +1,4 @@
-﻿using GeekShopping.CouponApi.Models.Base;
-
-namespace GeekShopping.CouponApi.Data.Dtos
+﻿namespace GeekShopping.Web.Models
 {
     public class CouponDto
     {

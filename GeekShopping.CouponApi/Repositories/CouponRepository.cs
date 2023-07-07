@@ -1,25 +1,41 @@
 ﻿using AutoMapper;
 using GeekShopping.CouponApi.Data.Dtos;
+using GeekShopping.CouponApi.Models;
 using GeekShopping.CouponApi.Models.Contexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace GeekShopping.CouponApi.Repositories
-{
-    public class CouponRepository : ICouponRepository
-    {
-        private readonly MyContext context;
-        private readonly IMapper mapper;
+namespace GeekShopping.CouponApi.Repositories;
 
-        public CouponRepository(IMapper mapper, MyContext context)
+public class CouponRepository : ICouponRepository
+{
+    private readonly MyContext context;
+    private readonly IMapper mapper;
+
+    public CouponRepository(IMapper mapper, MyContext context)
+    {
+        this.mapper = mapper;
+        this.context = context;
+    }
+
+    public async Task<bool> CreateCoupon(Coupon coupon)
+    {
+        try
         {
-            this.mapper = mapper;
-            this.context = context;
+            _ = context.Coupons.AddAsync(coupon);
+            await context.SaveChangesAsync();
+
+            return true;
         }
-        
-        public async Task<CouponDto> GetCouponByCouponCode(string couponCode)
+        catch (Exception)
         {
-            var coupon = await context.Coupons.FirstOrDefaultAsync(c => c.CouponCode == couponCode);
-            return mapper.Map<CouponDto>(coupon);
+            return false;
         }
+
+    }
+
+    public async Task<CouponDto> GetCouponByCouponCode(string couponCode)
+    {
+        var coupon = await context.Coupons.FirstOrDefaultAsync(c => c.CouponCode == couponCode);
+        return mapper.Map<CouponDto>(coupon);
     }
 }
