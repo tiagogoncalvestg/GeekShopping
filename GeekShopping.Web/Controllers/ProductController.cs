@@ -15,19 +15,15 @@ public class ProductController : Controller
 
     private readonly IProductService _productService;
 
-    private readonly IProductService2 _productService2;
-
     private readonly HttpClient httpClient;
     private Client client;
 
 
-    public ProductController(IProductService productService,
-                                IProductService2 productService2, IConfiguration config,
+    public ProductController(IProductService productService, IConfiguration config,
                                 HttpClient httpClient)
     {
         this.httpClient = httpClient;
         this.config = config;
-        _productService2 = productService2;
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
     }
 
@@ -36,10 +32,6 @@ public class ProductController : Controller
     {
         var token = await HttpContext.GetTokenAsync("access_token");
         client = new(httpClient, config.GetSection("ServicesUrl").GetSection("ProductAPI").Value);
-        //var products = await _productService.FindAllProducts(token);
-
-        //_productService2 aponta para interface não implementada criada para o refit
-        //var products = await _productService2.FindAllProducts(token);
 
         var products = await client.ProductAllAsync(token);
         return View(products);

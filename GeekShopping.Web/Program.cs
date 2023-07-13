@@ -1,7 +1,6 @@
 using GeekShopping.Web.Services;
 using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
-using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,10 +36,6 @@ builder.Services.AddHttpClient<IProductService, ProductService>(
 //builder.Services.AddHttpClient<ICouponService, CouponService>(
 //        c => c.BaseAddress = new Uri(builder.Configuration["ServicesUrl:CouponAPI"])
 //    );
-
-// Refit
-builder.Services.AddRefitClient<IProductService2>().ConfigureHttpClient(
-        c => c.BaseAddress = new Uri(builder.Configuration["ServicesUrl:ProductAPI"]));
 
 var app = builder.Build();
 

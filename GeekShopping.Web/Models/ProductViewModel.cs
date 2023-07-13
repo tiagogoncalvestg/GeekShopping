@@ -16,8 +16,8 @@ namespace GeekShopping.Web.Models
 
         public string SubstringName()
         {
-            if (Name.Length < 13) return Name;
-            return $"{ Name.Substring(0, 13) } ...";
+            if (Name.Length < 13) return Name + " ...";
+            return $"{ Name.Substring(0, 12) } ...";
         }
 
         public string SubstringDescription()
