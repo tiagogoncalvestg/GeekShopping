@@ -1,29 +1,22 @@
 ﻿using GeekShopping.Web.Models;
-using GeekShopping.Web.Services.ClientExtensions;
+using GeekShopping.Web.Models.Dtos;
 using GeekShopping.Web.Services.IServices;
 using GeekShopping.Web.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace GeekShopping.Web.Controllers;
 
 public class ProductController : Controller
 {
-    private readonly IConfiguration config;
-
+    private readonly IConfiguration _config;
     private readonly IProductService _productService;
 
-    private readonly HttpClient httpClient;
-    private Client client;
 
-
-    public ProductController(IProductService productService, IConfiguration config,
-                                HttpClient httpClient)
+    public ProductController(IProductService productService, IConfiguration config)
     {
-        this.httpClient = httpClient;
-        this.config = config;
+        _config = config;
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
     }
 
@@ -31,9 +24,8 @@ public class ProductController : Controller
     public async Task<IActionResult> ProductIndex()
     {
         var token = await HttpContext.GetTokenAsync("access_token");
-        client = new(httpClient, config.GetSection("ServicesUrl").GetSection("ProductAPI").Value);
 
-        var products = await client.ProductAllAsync(token);
+        var products = await _productService.FindAllProducts(token);
         return View(products);
     }
 
@@ -71,7 +63,7 @@ public class ProductController : Controller
         ProductDto productDto = new();
         productDto.Id = model.Id;
         productDto.Name = model.Name;
-        productDto.Price = (double)model.Price;
+        productDto.Price = (decimal)model.Price;
         productDto.CategoryName = model.CategoryName;
         productDto.ImageURL = model.ImageURL;
         productDto.Description = model.Description;

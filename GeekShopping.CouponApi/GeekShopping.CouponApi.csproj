@@ -28,6 +28,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Data\" />
+	  <Folder Include="Models\Data\" />
 	</ItemGroup>
 
 </Project>

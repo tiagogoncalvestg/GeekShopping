@@ -10,10 +10,12 @@ namespace GeekShopping.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
-
-        public CartController(IProductService productService,
+        private readonly ICouponService _couponService;
+       
+        public CartController(IProductService productService, ICouponService couponService,
             ICartService cartService)
         {
+            _couponService = couponService;
             _productService = productService;
             _cartService = cartService;
         }
@@ -21,7 +23,6 @@ namespace GeekShopping.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-            
             return View(await FindUserCart());
         }
 
@@ -93,7 +94,13 @@ namespace GeekShopping.Web.Controllers
 
                 if(response.CartHeader.CouponCode != null)
                 {
+                    token = await HttpContext.GetTokenAsync("access_token");
+                    var coupon = await _couponService.GetCoupon(response.CartHeader.CouponCode, token);
 
+                    if(coupon != null)
+                    {
+                        purchaseAmount = purchaseAmount - (purchaseAmount * coupon.DiscountAmount);
+                    }
                 }
             }
 
