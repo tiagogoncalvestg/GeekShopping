@@ -1,3 +1,5 @@
+using GeekShopping.Tests.Helpers;
+using GeekShopping.Tests.Helpers.Utils;
 using GeekShopping.Tests.Models;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -7,12 +9,14 @@ namespace GeekShopping.Tests.Fixtures;
 
 public class Tests
 {
-    IWebDriver _driver = new ChromeDriver();
+    //IWebDriver _driver = new ChromeDriver();
+    TestInfrastructure? test;
     AppUser appUser;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
+        test = new();
         appUser = AppUser.GenerateUser();
     }
     [SetUp]
@@ -22,39 +26,46 @@ public class Tests
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        _driver.Quit();
-        _driver.Dispose();
+        test.Driver.Quit();
+        test.Driver.Dispose();
     }
 
     [Test, Order(100)]
     public void VerifyServices()
     {
-        // TODO: rever lógica, aplicar conferência não-local
         // CartService
-        _driver.Url = "https://localhost:4445/swagger/v1/swagger.json";
-        var tagPre = _driver.FindElement(By.TagName("pre"));
-        Assert.IsNotNull(tagPre);
+        var response = test.Client.GetAsync("https://localhost:4445/api/cart/health");
+        Assert.IsTrue(response.Result.StatusCode == System.Net.HttpStatusCode.OK);
+
+        // CouponService
+        response = test.Client.GetAsync("https://localhost:4450/api/coupon/health");
+        Assert.IsTrue(response.Result.StatusCode == System.Net.HttpStatusCode.OK);
+
+        // ProductService
+        response = test.Client.GetAsync("https://localhost:4440/api/product/health");
+        Assert.IsTrue(response.Result.StatusCode == System.Net.HttpStatusCode.OK);
+
+
     }
 
     [Test, Order(200)]
     public void RegisterNewUser()
     {
-        _driver.Url = "https://localhost:4430";
-        _driver.Manage().Window.Maximize();
+        test.Driver.Url = "https://localhost:4430";
+        test.Driver.Manage().Window.Maximize();
 
-        _driver.FindElement(By.LinkText("Login")).Click();
-        _driver.FindElement(By.PartialLinkText("Create Account")).Click();
+        test.Driver.FindElement(By.LinkText("Login")).Click();
+        test.Driver.FindElement(By.PartialLinkText("Create Account")).Click();
 
-        _driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
-        _driver.FindElement(By.Id("Email")).SendKeys(appUser.Email);
-        _driver.FindElement(By.Id("FirstName")).SendKeys(appUser.FirstName);
-        _driver.FindElement(By.Id("LastName")).SendKeys(appUser.LastName);
-        _driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
+        test.Driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
+        test.Driver.FindElement(By.Id("Email")).SendKeys(appUser.Email);
+        test.Driver.FindElement(By.Id("FirstName")).SendKeys(appUser.FirstName);
+        test.Driver.FindElement(By.Id("LastName")).SendKeys(appUser.LastName);
+        test.Driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
 
-        var registerBtn = _driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
+        var registerBtn = test.Driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
 
-        IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
-        js.ExecuteScript("arguments[0].scrollIntoView(true);", registerBtn);
+        Util.ScroolToElement(test.Driver, registerBtn);
 
         registerBtn.Click();
     }
@@ -62,7 +73,7 @@ public class Tests
     [Test, Order(300)]
     public void Login()
     {
-        _driver.Url = "https://localhost:4430";
-        _driver.FindElement(By.LinkText("Login")).Click();
+        test.Driver.Url = "https://localhost:4430";
+        test.Driver.FindElement(By.LinkText("Login")).Click();
     }
 }

@@ -16,6 +16,12 @@ public class CouponController : ControllerBase
         this.repos = repos;
     }
 
+    [HttpGet("health")]
+    public ActionResult Health()
+    {
+        return Ok();
+    }
+
     [Authorize]
     [HttpGet("{couponCode}")]
     public async Task<ActionResult<CouponDto>> GetCouponByCouponCode(string couponCode)

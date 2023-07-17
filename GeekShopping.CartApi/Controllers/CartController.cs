@@ -15,6 +15,12 @@ public class CartController : ControllerBase
         this.repos = repos ?? throw new ArgumentNullException(nameof(repos));
     }
 
+    [HttpGet("health")]
+    public ActionResult Health()
+    {
+        return Ok();
+    }
+
     [HttpGet("find-cart/{userId}")]
     public async Task<ActionResult<CartDto>> FindById(string userId)
     {

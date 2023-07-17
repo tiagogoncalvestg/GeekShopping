@@ -28,6 +28,12 @@ namespace GeekShopping.ProductApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet("health")]
+        public ActionResult Health()
+        {
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> FindAll()
         {
