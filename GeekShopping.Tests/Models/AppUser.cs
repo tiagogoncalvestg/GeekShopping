@@ -12,9 +12,11 @@ public class AppUser
         Password = "Test@r123";
     }
 
+    #region Lista mock de usuários
     List<string> userNames = new() { "Rock", "Great", "Pretty", "Fire", "Personal", "Fast" };
     List<string> firstNames = new() { "Alex", "Erick", "Lisa", "Sun", "Lee", "Jennifer" };
     List<string> lastNames = new() { "C.", "Alpaccinno", "Gonzales", "B. J.", "Luccas", "Richard" };
+    #endregion
 
     public static AppUser GenerateUser()
     {

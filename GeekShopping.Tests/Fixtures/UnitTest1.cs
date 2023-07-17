@@ -11,7 +11,7 @@ public class Tests
     AppUser appUser;
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() 
+    public void OneTimeSetUp()
     {
         appUser = AppUser.GenerateUser();
     }
@@ -20,7 +20,7 @@ public class Tests
     [TearDown]
     public void Teardown() { }
     [OneTimeTearDown]
-    public void OneTimeTearDown() 
+    public void OneTimeTearDown()
     {
         _driver.Quit();
         _driver.Dispose();
@@ -53,9 +53,16 @@ public class Tests
 
         var registerBtn = _driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
 
-        IJavaScriptExecutor js = (IJavaScriptExecutor)_driver; 
+        IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
         js.ExecuteScript("arguments[0].scrollIntoView(true);", registerBtn);
 
         registerBtn.Click();
+    }
+
+    [Test, Order(300)]
+    public void Login()
+    {
+        _driver.Url = "https://localhost:4430";
+        _driver.FindElement(By.LinkText("Login")).Click();
     }
 }

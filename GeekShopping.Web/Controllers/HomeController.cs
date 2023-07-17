@@ -20,20 +20,13 @@ namespace GeekShopping.Web.Controllers
             _cartService = cartService;
         }
 
-        public async Task<ViewResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<ViewResult> Index(string searchString, int? page)
         {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
             var products = await _productService.FindAllProducts("");
 
             if (searchString != null)
             {
                 page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
             }
 
             ViewBag.CurrentFilter = searchString;
@@ -43,24 +36,10 @@ namespace GeekShopping.Web.Controllers
                 products = products.Where(s => s.Name.Contains(searchString)
                                        || s.Description.Contains(searchString));
             }
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    products = products.OrderByDescending(s => s.Name);
-                    break;
-                case "Date":
-                    products = products.OrderBy(s => s.CategoryName);
-                    break;
-                case "date_desc":
-                    products = products.OrderByDescending(s => s.Price);
-                    break;
-                default:
-                    products = products.OrderBy(s => s.Name);
-                    break;
-            }
+
             int pageSize = 4;
             int pageNumber = (page ?? 1);
-            return View((X.PagedList.IPagedList)products.ToPagedList(pageNumber, pageSize));
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
 
         [Authorize]
