@@ -10,6 +10,6 @@ public class TestInfrastructure
         Client = new();
         Driver = new ChromeDriver();
     }
-    public HttpClient? Client { get; set; }
-    public IWebDriver? Driver { get; set; }
+    public HttpClient Client { get; set; } = null!;
+    public IWebDriver Driver { get; set; } = null!;
 }
