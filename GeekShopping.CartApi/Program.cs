@@ -4,6 +4,8 @@ using GeekShopping.CartApi.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using GeekShopping.CartApi.Repositories;
+using Microsoft.Extensions.Options;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +44,17 @@ builder.Services.AddAuthorization(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "GeekShopping.CartApi", Version = "v1" });
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "GeekShopping.CartApi",
+        Description = "Api para acesso aos serviços do carrinho de compra de GeekShopping.com.",
+        Contact = new OpenApiContact
+        {
+            Name = "Tiago Gonçalves",
+            Url = new Uri("https://github.com/tiagogoncalvestg/GeekShopping")
+        },
+        Version = "v1"
+    });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -72,6 +84,11 @@ builder.Services.AddSwaggerGen(c =>
 
         }
     });
+
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
 
 });
 
