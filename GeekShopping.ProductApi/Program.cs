@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Refit;
+using System.Reflection;
 using MyContext = GeekShopping.ProductApi.Models.Contexts.MyContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -75,6 +76,10 @@ builder.Services.AddSwaggerGen(c =>
 
         }
     });
+
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
 });
 

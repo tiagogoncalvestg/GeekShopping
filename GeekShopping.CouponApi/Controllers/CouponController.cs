@@ -16,6 +16,10 @@ public class CouponController : ControllerBase
         this.repos = repos;
     }
 
+    /// <summary>
+    /// Obtêm uma resposta status code 200
+    /// </summary>
+    /// <remarks>Utilizado para teste de disponibilidade do serviço</remarks>
     [HttpGet("health")]
     public ActionResult Health()
     {
