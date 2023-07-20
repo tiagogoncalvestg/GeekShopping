@@ -75,13 +75,19 @@ public class Tests
     {
         test.Driver.FindElement(By.LinkText("Logout")).Click();
         test.Driver.Url = "https://localhost:4430";
-        test.Driver.FindElement(By.LinkText("Login")).Click();
-        test.Driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
-        test.Driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
-        test.Driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]")).Click();
+        AppUser.Login(appUser, test.Driver);
 
         var userName = test.Driver.FindElement(By.PartialLinkText(appUser.UserName));
 
         Assert.IsNotNull(userName);
+    }
+
+    [Test, Order(400)]
+    public void AddProductToCart()
+    {
+        test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div[4]/div/div/div/div/div[2]/a")).Click();
+        test.Driver.FindElement(By.Id("Count")).SendKeys(Keys.Delete + "2");
+        test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[3]/div[2]/button")).Click();
+        test.Driver.FindElement(By.XPath("/html/body/header/nav/div/div/ul[1]/li[2]/a/i")).Click();
     }
 }
