@@ -28,4 +28,11 @@ Tela de processamento do pedido:
   <img src="https://user-images.githubusercontent.com/85870899/250968713-88b6a2fb-e30c-44d2-87a2-d6f802eb280b.png" />
 </div>
 
+---------
+
+Exemplo de como as apis estão sendo documentadas:
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/85870899/254314956-faa6888f-f12f-4cf4-a9b7-cb8c63fc24fd.png" />
+</div>
+
 
