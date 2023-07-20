@@ -16,7 +16,6 @@ namespace GeekShopping.Web.Services
         }
         public async Task<CouponDto> GetCoupon(string couponCode, string token)
         {
-            // TODO: Investigar exception!!!
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"{BasePath}/{couponCode}");
             return await response.ReadContentAs<CouponDto>();

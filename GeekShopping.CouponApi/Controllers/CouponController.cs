@@ -1,4 +1,5 @@
 using GeekShopping.CouponApi.Data.Dtos;
+using GeekShopping.CouponApi.Models;
 using GeekShopping.CouponApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,14 @@ public class CouponController : ControllerBase
     public async Task<ActionResult<CouponDto>> GetCouponByCouponCode(string couponCode)
     {
         var coupon = await repos.GetCouponByCouponCode(couponCode);
-        if (coupon is null) return NotFound();
+        if (coupon is null)
+        {
+            coupon = new()
+            {
+                CouponCode = null
+            };
+            return Ok(coupon);
+        }
         return Ok(coupon);
 
     }

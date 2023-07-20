@@ -15,12 +15,12 @@ public class MyContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Coupon>().HasData(new Coupon
-        {
-            Id = Guid.NewGuid(),
-            CouponCode = "FRIDAY",
-            DiscountAmount = (decimal)0.2
-        });
+        //modelBuilder.Entity<Coupon>().HasData(new Coupon
+        //{
+        //    Id = Guid.NewGuid(),
+        //    CouponCode = "FRIDAY",
+        //    DiscountAmount = (decimal)0.2
+        //});
     }
 
     public DbSet<Coupon> Coupons { get; set; }

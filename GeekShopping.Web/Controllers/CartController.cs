@@ -93,7 +93,9 @@ namespace GeekShopping.Web.Controllers
                     purchaseAmount += detail.Price;
                 }
 
-                if(response.CartHeader.CouponCode != null)
+                if (response.CartHeader.CouponCode == "")
+                    response.CartHeader.CouponCode = null;
+                    if (response.CartHeader.CouponCode != null)
                 {
                     token = await HttpContext.GetTokenAsync("access_token");
                     var coupon = await _couponService.GetCoupon(response.CartHeader.CouponCode, token);

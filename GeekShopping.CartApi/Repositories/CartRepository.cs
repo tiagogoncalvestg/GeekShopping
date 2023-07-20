@@ -64,7 +64,7 @@ namespace GeekShopping.CartApi.Repositories
             {
                 CartHeader cartHeader = new();
 
-                cartHeader.CouponCode = "";
+                cartHeader.CouponCode = null;
                 cartHeader.UserId = userId;
 
                 context.CartHeaders.AddAsync(cartHeader);
