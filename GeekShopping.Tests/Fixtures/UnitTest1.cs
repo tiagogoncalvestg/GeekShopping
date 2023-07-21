@@ -85,9 +85,18 @@ public class Tests
     [Test, Order(400)]
     public void AddProductToCart()
     {
+        // Seleciona um produto
         test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div[4]/div/div/div/div/div[2]/a")).Click();
+
+        // Seta a quantidade para 2 e confirma
         test.Driver.FindElement(By.Id("Count")).SendKeys(Keys.Delete + "2");
         test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[3]/div[2]/button")).Click();
+
+        // Clica no ícone do carrinho
         test.Driver.FindElement(By.XPath("/html/body/header/nav/div/div/ul[1]/li[2]/a/i")).Click();
+
+        // Verifica a quantidade
+        var amount = test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[2]/div[2]/div[4]/span")).Text;
+        Assert.That(amount == "2");
     }
 }
