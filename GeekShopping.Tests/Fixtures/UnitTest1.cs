@@ -1,6 +1,7 @@
 using GeekShopping.Tests.Helpers;
 using GeekShopping.Tests.Helpers.Utils;
 using GeekShopping.Tests.Models;
+using GeekShopping.Tests.PageModels;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
@@ -8,13 +9,16 @@ namespace GeekShopping.Tests.Fixtures;
 
 public class Tests
 {
-    TestInfrastructure? test;
     AppUser appUser;
+    TestInfrastructure? test;
+
+    LoginPage loginPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         test = new();
+        loginPage = new(test.Driver);
         appUser = AppUser.GenerateUser();
     }
     [SetUp]
@@ -75,7 +79,12 @@ public class Tests
     {
         test.Driver.FindElement(By.LinkText("Logout")).Click();
         test.Driver.Url = "https://localhost:4430";
-        AppUser.Login(appUser, test.Driver);
+
+        test.Driver.FindElement(By.LinkText("Login")).Click();
+
+        loginPage.SetUsername(appUser.UserName);
+        loginPage.SetPassword(appUser.Password);
+        loginPage.SubmitLogin();
 
         var userName = test.Driver.FindElement(By.PartialLinkText(appUser.UserName));
 
@@ -92,8 +101,10 @@ public class Tests
         test.Driver.FindElement(By.Id("Count")).SendKeys(Keys.Delete + "2");
         test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[3]/div[2]/button")).Click();
 
+        // TODO: refatorar após implementação correta do POM
         // Clica no ícone do carrinho
-        test.Driver.FindElement(By.XPath("/html/body/header/nav/div/div/ul[1]/li[2]/a/i")).Click();
+        var ico = test.Driver.FindElement(Home.cartIco);
+        ico.Click();
 
         // Verifica a quantidade
         var amount = test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[2]/div[2]/div[4]/span")).Text;

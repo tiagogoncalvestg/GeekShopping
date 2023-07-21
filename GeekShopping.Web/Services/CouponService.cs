@@ -14,11 +14,11 @@ namespace GeekShopping.Web.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<CouponDto> GetCoupon(string couponCode, string token)
+        public async Task<Models.Dtos.CouponDto> GetCoupon(string couponCode, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"{BasePath}/{couponCode}");
-            return await response.ReadContentAs<CouponDto>();
+            return await response.ReadContentAs<Models.Dtos.CouponDto>();
 
 
         }
