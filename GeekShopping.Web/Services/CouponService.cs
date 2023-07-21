@@ -1,27 +1,26 @@
 ﻿using GeekShopping.Web.Models;
-using GeekShopping.Web.Services.ClientExtensions;
+using GeekShopping.Web.Models.Dtos;
 using GeekShopping.Web.Services.IServices;
 using GeekShopping.Web.Utils;
-using Newtonsoft.Json.Linq;
-using System.Reflection;
+using System.Net.Http.Headers;
 
-namespace GeekShopping.Web.Services;
-
-public class CouponService : ICouponService
+namespace GeekShopping.Web.Services
 {
-    private readonly HttpClient client;
-    public const string BasePath = "api/coupon";
-    public CouponService(HttpClient client)
+    public class CouponService : ICouponService
     {
-        this.client = client ?? throw new ArgumentNullException(nameof(client));
-    }
-    public async Task<CouponDto> GetCoupon(string couponCode, string token)
-    {
-        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        var response = await client.GetAsync($"{BasePath}/{couponCode.ToUpper()}");
-        if (response.IsSuccessStatusCode)
+        readonly HttpClient _httpClient;
+        public const string BasePath = "api/coupon";
+        public CouponService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+        public async Task<CouponDto> GetCoupon(string couponCode, string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.GetAsync($"{BasePath}/{couponCode}");
             return await response.ReadContentAs<CouponDto>();
-        else 
-            return new();
+
+
+        }
     }
 }

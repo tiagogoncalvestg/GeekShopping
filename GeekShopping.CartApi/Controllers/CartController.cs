@@ -15,6 +15,19 @@ public class CartController : ControllerBase
         this.repos = repos ?? throw new ArgumentNullException(nameof(repos));
     }
 
+    /// <summary>
+    /// Obtêm uma resposta status code 200
+    /// </summary>
+    /// <remarks>Utilizado para teste de disponibilidade do serviço</remarks>
+    [HttpGet("health")]
+    public ActionResult Health()
+    {
+        return Ok();
+    }
+
+    /// <summary>
+    /// Obtêm o carrinho de compra do usuário
+    /// </summary>
     [HttpGet("find-cart/{userId}")]
     public async Task<ActionResult<CartDto>> FindById(string userId)
     {
@@ -29,7 +42,10 @@ public class CartController : ControllerBase
 
         return Ok(cart);
     }
-
+    /// <summary>
+    /// Adiciona ou atualiza um cartdetail
+    /// </summary>
+    /// <remarks>Caso não exista um cartheader, ele é criado</remarks>
     [HttpPost("add-cart")]
     public async Task<ActionResult<CartDto>> AddCart(CartDto cartDto)
     {
@@ -40,6 +56,9 @@ public class CartController : ControllerBase
         return Ok(cart);
     }
 
+    /// <summary>
+    /// Adiciona um cupom ao cartheader
+    /// </summary>
     [HttpPost("apply-coupon")]
     public async Task<ActionResult<CartDto>> ApplyCoupon(CartDto cartDto)
     {
@@ -50,6 +69,9 @@ public class CartController : ControllerBase
         return Ok(status);
     }
 
+    /// <summary>
+    /// Remove o cupom do cartheader
+    /// </summary>
     [HttpDelete("remove-coupon/{userId}")]
     public async Task<ActionResult<CartDto>> RemoveCoupon(string userId)
     {
@@ -60,6 +82,9 @@ public class CartController : ControllerBase
         return Ok(status);
     }
 
+    /// <summary>
+    /// Atualiza o cartdetail
+    /// </summary>
     [HttpPut("update-cart")]
     public async Task<ActionResult<CartDto>> UpdateCart(CartDto cartDto)
     {
@@ -70,6 +95,9 @@ public class CartController : ControllerBase
         return Ok(cart);
     }
 
+    /// <summary>
+    /// Remove o cartdetail e o cartheader
+    /// </summary>
     [HttpDelete("remove-cart/{id}")]
     public async Task<ActionResult<CartDto>> RemoveCart(Guid id)
     {

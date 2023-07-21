@@ -28,6 +28,16 @@ namespace GeekShopping.ProductApi.Controllers
             return Ok(product);
         }
 
+        /// <summary>
+        /// Obtêm uma resposta status code 200
+        /// </summary>
+        /// <remarks>Utilizado para teste de disponibilidade do serviço</remarks>
+        [HttpGet("health")]
+        public ActionResult Health()
+        {
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> FindAll()
         {

@@ -1,4 +1,7 @@
-﻿namespace GeekShopping.Tests.Models;
+﻿using NUnit.Framework.Internal;
+using OpenQA.Selenium;
+
+namespace GeekShopping.Tests.Models;
 
 public class AppUser
 {
@@ -12,13 +15,24 @@ public class AppUser
         Password = "Test@r123";
     }
 
+    #region Lista mock de usuários
     List<string> userNames = new() { "Rock", "Great", "Pretty", "Fire", "Personal", "Fast" };
     List<string> firstNames = new() { "Alex", "Erick", "Lisa", "Sun", "Lee", "Jennifer" };
     List<string> lastNames = new() { "C.", "Alpaccinno", "Gonzales", "B. J.", "Luccas", "Richard" };
+    #endregion
 
     public static AppUser GenerateUser()
     {
         return new();
+    }
+
+    public static void Login(AppUser appUser, IWebDriver driver)
+    {
+        driver.FindElement(By.LinkText("Login")).Click();
+        driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
+        driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
+
+        driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]")).Click();
     }
 
     public string? UserName { get; set; }

@@ -4,6 +4,7 @@ using GeekShopping.CartAPI.Data.Dtos;
 using GeekShopping.CartAPI.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Transactions;
 
 namespace GeekShopping.CartApi.Repositories
 {
@@ -59,11 +60,11 @@ namespace GeekShopping.CartApi.Repositories
             };
 
             // Se o CartHeader for null, um é criado na base de dados
-            if(cart.CartHeader == null)
+            if (cart.CartHeader == null)
             {
                 CartHeader cartHeader = new();
 
-                cartHeader.CouponCode = "";
+                cartHeader.CouponCode = null;
                 cartHeader.UserId = userId;
 
                 context.CartHeaders.AddAsync(cartHeader);
@@ -84,7 +85,7 @@ namespace GeekShopping.CartApi.Repositories
                         .FirstOrDefaultAsync(c => c.UserId == userId);
             if (header != null)
             {
-                header.CouponCode = "";
+                header.CouponCode = null;
 
                 context.CartHeaders.Update(header);
                 await context.SaveChangesAsync();
@@ -120,6 +121,7 @@ namespace GeekShopping.CartApi.Repositories
             }
         }
 
+        //TODO: solucionar falha ao tentar criar carrinho e cartdetail 
         public async Task<CartDto> SaveOrUpdateCart(CartDto cartDto)
         {
             Cart cart = mapper.Map<Cart>(cartDto);
@@ -141,14 +143,14 @@ namespace GeekShopping.CartApi.Repositories
             if (cartHeader == null)
             {
                 //Create CartHeader and CartDetails
-                context.CartHeaders.Add(cart.CartHeader);
+                _ = context.CartHeaders.AddAsync(cart.CartHeader);
                 await context.SaveChangesAsync();
 
                 cart.CartDetails.FirstOrDefault().CartHeaderId = cart.CartHeader.Id;
-                cart.CartDetails.FirstOrDefault().Product = null;
+                cart.CartDetails.FirstOrDefault().Price = (decimal)cart.CartDetails.FirstOrDefault().Product.Price;
 
-                context.CartDetails.Add(cart.CartDetails.FirstOrDefault());
-                await context.SaveChangesAsync();
+                context.Entry(cart.CartDetails.FirstOrDefault()).State = EntityState.Added;
+                context.SaveChanges();
             }
             else
             {
@@ -177,7 +179,7 @@ namespace GeekShopping.CartApi.Repositories
                 {
                     //Update product count and CartDetails
                     int count = cart.CartDetails.FirstOrDefault().Count;
-                    decimal price = (decimal) cart.CartDetails.FirstOrDefault().Product.Price;
+                    decimal price = (decimal)cart.CartDetails.FirstOrDefault().Product.Price;
 
                     cartDetail.Product = null;
                     cartDetail.Price = price * count;

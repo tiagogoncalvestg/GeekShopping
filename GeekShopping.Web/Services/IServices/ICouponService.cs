@@ -1,9 +1,9 @@
-﻿using GeekShopping.Web.Models;
+﻿using GeekShopping.Web.Models.Dtos;
 
 namespace GeekShopping.Web.Services.IServices
 {
     public interface ICouponService
     {
-        public Task<CouponDto> GetCoupon(string couponCode, string token);
+        Task<CouponDto> GetCoupon(string couponCode, string token);
     }
 }

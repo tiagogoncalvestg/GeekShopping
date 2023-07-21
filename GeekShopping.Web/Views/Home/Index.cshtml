@@ -1,10 +1,19 @@
-﻿@model IEnumerable<GeekShopping.Web.Models.ProductViewModel>
+﻿@model X.PagedList.IPagedList<GeekShopping.Web.Models.ProductViewModel>
+@using X.PagedList.Mvc.Core
 
+<div>
+    <form method="get" asp-action="Index">
+        <p>
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    </form>
+</div>
 <form>
-    <div class="container row">
+    <div class="row">
         @foreach (var product in Model)
         {
-            <div class="col-4">
+            <div class="col-3">
                 <div class="p-0 my-3 border">
                     <div class="card">
                         <img src="@product.ImageURL" class="card-img-top">
@@ -12,14 +21,14 @@
                             <h3 class="card-title text-success">@product.SubstringName()</h3>
                             <span class="badge badge-light mb-2">@product.CategoryName</span>
                             <p class="card-text">@product.SubstringDescription()</p>
-                            
+
                             <div class="row">
                                 <div class="col pt-1">
                                     <span style="font-size:23px;">@product.Price.ToString("c")</span>
                                 </div>
                                 <div class="col">
-                                    <a asp-action="Details" asp-route-id="@product.Id" 
-                                    class="btn btn-success form-control">Details</a>
+                                    <a asp-action="Details" asp-route-id="@product.Id"
+                                       class="btn btn-success form-control">Details</a>
                                 </div>
                             </div>
                         </div>
@@ -29,3 +38,17 @@
         }
     </div>
 </form>
+
+<div>
+    <p class="text-end">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </p>
+    <div class="d-flex flex-row-reverse">
+        @Html.PagedListPager((X.PagedList.IPagedList)Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}),
+        new X.PagedList.Web.Common.PagedListRenderOptions(){
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+        })
+    </div>
+</div>

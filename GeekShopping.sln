@@ -17,11 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekShopping.CartApi", "Gee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekShopping.CouponApi", "GeekShopping.CouponApi\GeekShopping.CouponApi.csproj", "{800C3CF9-8770-40D9-89D1-30B7150F9AD4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1FF6EE98-4BDF-4C6E-A297-E251CF68112F}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CartApi", "CartApi", "{A6803434-C81A-4792-B61B-ED3FB9C8D175}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CouponApi", "CouponApi", "{F3B32B2D-D0C5-4979-83AB-C42D13F2ED46}"
@@ -32,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductApi", "ProductApi", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7C18ADB3-4706-4CAD-AE72-ACBB74EA8B58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.Tests", "GeekShopping.Tests\GeekShopping.Tests.csproj", "{C313CA41-1D50-4CBB-89C5-ABD59A630A85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeekShopping.Tests", "GeekShopping.Tests\GeekShopping.Tests.csproj", "{C313CA41-1D50-4CBB-89C5-ABD59A630A85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

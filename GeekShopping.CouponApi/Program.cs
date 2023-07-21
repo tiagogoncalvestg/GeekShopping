@@ -4,6 +4,7 @@ using GeekShopping.CouponApi.Models.Contexts;
 using GeekShopping.CouponApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,17 @@ builder.Services.AddAuthorization(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "GeekShopping.CuponApi", Version = "v1" });
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "GeekShopping.Coupon",
+        Description = "Api para acesso aos serviços de cupom de GeekShopping.com.",
+        Contact = new OpenApiContact
+        {
+            Name = "Tiago Gonçalves",
+            Url = new Uri("https://github.com/tiagogoncalvestg/GeekShopping")
+        },
+        Version = "v1"
+    });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -73,6 +84,10 @@ builder.Services.AddSwaggerGen(c =>
 
         }
     });
+
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
 });
 

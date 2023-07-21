@@ -3,6 +3,7 @@ using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GeekShopping.Web.Controllers
 {
@@ -11,9 +12,9 @@ namespace GeekShopping.Web.Controllers
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
         private readonly ICouponService _couponService;
-
-        public CartController(IProductService productService,
-            ICartService cartService, ICouponService couponService)
+       
+        public CartController(IProductService productService, ICouponService couponService,
+            ICartService cartService)
         {
             _couponService = couponService;
             _productService = productService;
@@ -23,7 +24,7 @@ namespace GeekShopping.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-
+            
             return View(await FindUserCart());
         }
 
@@ -99,16 +100,16 @@ namespace GeekShopping.Web.Controllers
                     purchaseAmount += detail.Price;
                 }
 
-                if (response.CartHeader.CouponCode != null)
+                if (response.CartHeader.CouponCode == "")
+                    response.CartHeader.CouponCode = null;
+                    if (response.CartHeader.CouponCode != null)
                 {
-                    var coupon = await _couponService.GetCoupon(response.CartHeader.CouponCode, token); 
-                    if (coupon.CouponCode != null)
+                    token = await HttpContext.GetTokenAsync("access_token");
+                    var coupon = await _couponService.GetCoupon(response.CartHeader.CouponCode, token);
+
+                    if(coupon != null)
                     {
                         purchaseAmount = purchaseAmount - (purchaseAmount * coupon.DiscountAmount);
-                    }
-                    else
-                    {
-                        response.CartHeader.CouponCode = "";
                     }
                 }
             }

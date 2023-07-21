@@ -1,7 +1,6 @@
 using GeekShopping.Web.Services;
 using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
-using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 

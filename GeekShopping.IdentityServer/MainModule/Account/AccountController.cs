@@ -286,12 +286,12 @@ namespace IdentityServerHost.Quickstart.UI
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (!_roleManager.RoleExistsAsync(model.RoleName).GetAwaiter().GetResult())
+                    if (!_roleManager.RoleExistsAsync("Client").GetAwaiter().GetResult())
                     {
                         var userRole = new IdentityRole
                         {
-                            Name = model.RoleName,
-                            NormalizedName = model.RoleName,
+                            Name = "Client",
+                            NormalizedName = "CLIENT",
 
                         };
                         await _roleManager.CreateAsync(userRole);

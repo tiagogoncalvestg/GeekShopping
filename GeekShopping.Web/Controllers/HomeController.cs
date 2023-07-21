@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace GeekShopping.Web.Controllers
 {
@@ -19,10 +20,26 @@ namespace GeekShopping.Web.Controllers
             _cartService = cartService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<ViewResult> Index(string searchString, int? page)
         {
             var products = await _productService.FindAllProducts("");
-            return View(products);
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.Name.Contains(searchString)
+                                       || s.Description.Contains(searchString));
+            }
+
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
 
         [Authorize]

@@ -1,18 +1,20 @@
+using GeekShopping.Tests.Helpers;
+using GeekShopping.Tests.Helpers.Utils;
 using GeekShopping.Tests.Models;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace GeekShopping.Tests.Fixtures;
 
 public class Tests
 {
-    IWebDriver _driver = new ChromeDriver();
+    TestInfrastructure? test;
     AppUser appUser;
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() 
+    public void OneTimeSetUp()
     {
+        test = new();
         appUser = AppUser.GenerateUser();
     }
     [SetUp]
@@ -20,42 +22,81 @@ public class Tests
     [TearDown]
     public void Teardown() { }
     [OneTimeTearDown]
-    public void OneTimeTearDown() 
+    public void OneTimeTearDown()
     {
-        _driver.Quit();
-        _driver.Dispose();
+        test.Driver.Quit();
+        test.Driver.Dispose();
     }
 
     [Test, Order(100)]
     public void VerifyServices()
     {
-        // TODO: rever lógica, aplicar conferência não-local
         // CartService
-        _driver.Url = "https://localhost:4445/swagger/v1/swagger.json";
-        var tagPre = _driver.FindElement(By.TagName("pre"));
-        Assert.IsNotNull(tagPre);
+        var response = test.Client.GetAsync("https://localhost:4445/api/cart/health");
+        Assert.That(response.Result.StatusCode == System.Net.HttpStatusCode.OK);
+
+        // CouponService
+        response = test.Client.GetAsync("https://localhost:4450/api/coupon/health");
+        Assert.That(response.Result.StatusCode == System.Net.HttpStatusCode.OK);
+
+        // ProductService
+        response = test.Client.GetAsync("https://localhost:4440/api/product/health");
+        Assert.That(response.Result.StatusCode == System.Net.HttpStatusCode.OK);
     }
 
     [Test, Order(200)]
     public void RegisterNewUser()
     {
-        _driver.Url = "https://localhost:4430";
-        _driver.Manage().Window.Maximize();
+        test.Driver.Url = "https://localhost:4430";
+        test.Driver.Manage().Window.Maximize();
 
-        _driver.FindElement(By.LinkText("Login")).Click();
-        _driver.FindElement(By.PartialLinkText("Create Account")).Click();
+        test.Driver.FindElement(By.LinkText("Login")).Click();
+        test.Driver.FindElement(By.PartialLinkText("Create Account")).Click();
 
-        _driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
-        _driver.FindElement(By.Id("Email")).SendKeys(appUser.Email);
-        _driver.FindElement(By.Id("FirstName")).SendKeys(appUser.FirstName);
-        _driver.FindElement(By.Id("LastName")).SendKeys(appUser.LastName);
-        _driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
+        test.Driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
+        test.Driver.FindElement(By.Id("Email")).SendKeys(appUser.Email);
+        test.Driver.FindElement(By.Id("FirstName")).SendKeys(appUser.FirstName);
+        test.Driver.FindElement(By.Id("LastName")).SendKeys(appUser.LastName);
+        test.Driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
 
-        var registerBtn = _driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
-
-        IJavaScriptExecutor js = (IJavaScriptExecutor)_driver; 
-        js.ExecuteScript("arguments[0].scrollIntoView(true);", registerBtn);
+        var registerBtn = test.Driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
+        Util.ScroolToElement(test.Driver, registerBtn);
 
         registerBtn.Click();
+
+        test.Driver.FindElement(By.LinkText("Login")).Click();
+        var userName = test.Driver.FindElement(By.PartialLinkText(appUser.UserName));
+
+        Assert.IsNotNull(userName);
+    }
+
+    [Test, Order(300)]
+    public void Login()
+    {
+        test.Driver.FindElement(By.LinkText("Logout")).Click();
+        test.Driver.Url = "https://localhost:4430";
+        AppUser.Login(appUser, test.Driver);
+
+        var userName = test.Driver.FindElement(By.PartialLinkText(appUser.UserName));
+
+        Assert.IsNotNull(userName);
+    }
+
+    [Test, Order(400)]
+    public void AddProductToCart()
+    {
+        // Seleciona um produto
+        test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div[4]/div/div/div/div/div[2]/a")).Click();
+
+        // Seta a quantidade para 2 e confirma
+        test.Driver.FindElement(By.Id("Count")).SendKeys(Keys.Delete + "2");
+        test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[3]/div[2]/button")).Click();
+
+        // Clica no ícone do carrinho
+        test.Driver.FindElement(By.XPath("/html/body/header/nav/div/div/ul[1]/li[2]/a/i")).Click();
+
+        // Verifica a quantidade
+        var amount = test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[2]/div[2]/div[4]/span")).Text;
+        Assert.That(amount == "2");
     }
 }
