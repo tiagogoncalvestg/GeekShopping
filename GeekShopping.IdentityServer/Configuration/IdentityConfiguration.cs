@@ -40,7 +40,7 @@ namespace GeekShopping.IdentityServer.Configuration
                     ClientId = "geek_shopping",
                     ClientSecrets = { new Secret("my_super_secret".Sha256()) },
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = {"https://localhost:4430/signin-oidc"},
+                    RedirectUris = {"https://localhost:4430/signin-oidc"},                    
                     PostLogoutRedirectUris = {"https://localhost:4430/signout-callbabk-oidc"},
                     AllowedScopes = new List<string>
                     {
