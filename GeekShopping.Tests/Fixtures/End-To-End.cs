@@ -10,15 +10,18 @@ namespace GeekShopping.Tests.Fixtures;
 public class Tests
 {
     AppUser appUser;
-    TestInfrastructure? test;
+    TestInfrastructure test = null!;
 
+    HomePage homePage;
     LoginPage loginPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         test = new();
+        homePage = new(test.Driver);
         loginPage = new(test.Driver);
+
         appUser = AppUser.GenerateUser();
     }
     [SetUp]
@@ -51,10 +54,11 @@ public class Tests
     [Test, Order(200)]
     public void RegisterNewUser()
     {
-        test.Driver.Url = "https://localhost:4430";
-        test.Driver.Manage().Window.Maximize();
+        homePage.GoToPage();
 
-        test.Driver.FindElement(By.LinkText("Login")).Click();
+        homePage.Login();
+
+        //loginPage
         test.Driver.FindElement(By.PartialLinkText("Create Account")).Click();
 
         test.Driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
@@ -68,7 +72,8 @@ public class Tests
 
         registerBtn.Click();
 
-        test.Driver.FindElement(By.LinkText("Login")).Click();
+        homePage.Login();
+        //test.Driver.FindElement(By.LinkText("Login")).Click();
         var userName = test.Driver.FindElement(By.PartialLinkText(appUser.UserName));
 
         Assert.IsNotNull(userName);
@@ -103,8 +108,8 @@ public class Tests
 
         // TODO: refatorar após implementação correta do POM
         // Clica no ícone do carrinho
-        var ico = test.Driver.FindElement(Home.cartIco);
-        ico.Click();
+        //var ico = test.Driver.FindElement(HomePage.cartIco);
+        //ico.Click();
 
         // Verifica a quantidade
         var amount = test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[2]/div[2]/div[4]/span")).Text;
