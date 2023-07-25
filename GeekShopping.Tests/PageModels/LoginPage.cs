@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework.Internal;
+using OpenQA.Selenium;
 
 namespace GeekShopping.Tests.PageModels;
 
@@ -8,9 +9,12 @@ public class LoginPage
     public LoginPage(IWebDriver driver)
     {
         _driver = driver;
-        //_driver.Url = "https://localhost:4435";
     }
 
+    public void CreateAccount()
+    {
+        _driver.FindElement(By.PartialLinkText("Create Account")).Click();
+    }
     public void SetUsername(string userName)
     {
         _driver.FindElement(this.userName).SendKeys(userName);

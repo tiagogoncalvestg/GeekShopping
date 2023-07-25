@@ -10,15 +10,25 @@ namespace GeekShopping.Tests.Fixtures;
 public class Tests
 {
     AppUser appUser;
-    TestInfrastructure? test;
+    TestInfrastructure test = null!;
 
+    HomePage homePage;
+    CartPage cartPage;
     LoginPage loginPage;
+    RegisterPage registerPage;
+    ProductDetailPage productDetailPage;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         test = new();
+
+        cartPage = new(test.Driver);
+        homePage = new(test.Driver);
         loginPage = new(test.Driver);
+        registerPage = new(test.Driver);
+        productDetailPage = new(test.Driver);
+
         appUser = AppUser.GenerateUser();
     }
     [SetUp]
@@ -51,24 +61,19 @@ public class Tests
     [Test, Order(200)]
     public void RegisterNewUser()
     {
-        test.Driver.Url = "https://localhost:4430";
-        test.Driver.Manage().Window.Maximize();
+        homePage.GoToPage();
+        homePage.Login();
 
-        test.Driver.FindElement(By.LinkText("Login")).Click();
-        test.Driver.FindElement(By.PartialLinkText("Create Account")).Click();
+        loginPage.CreateAccount();
 
-        test.Driver.FindElement(By.Id("Username")).SendKeys(appUser.UserName);
-        test.Driver.FindElement(By.Id("Email")).SendKeys(appUser.Email);
-        test.Driver.FindElement(By.Id("FirstName")).SendKeys(appUser.FirstName);
-        test.Driver.FindElement(By.Id("LastName")).SendKeys(appUser.LastName);
-        test.Driver.FindElement(By.Id("Password")).SendKeys(appUser.Password);
-
-        var registerBtn = test.Driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div/div[2]/form/button[1]"));
+        registerPage.FillForm(appUser);
+        
+        var registerBtn = test.Driver.FindElement(registerPage.btnRegister);
         Util.ScroolToElement(test.Driver, registerBtn);
 
-        registerBtn.Click();
+        registerPage.SubmitForm();
 
-        test.Driver.FindElement(By.LinkText("Login")).Click();
+        homePage.Login();
         var userName = test.Driver.FindElement(By.PartialLinkText(appUser.UserName));
 
         Assert.IsNotNull(userName);
@@ -77,10 +82,10 @@ public class Tests
     [Test, Order(300)]
     public void Login()
     {
-        test.Driver.FindElement(By.LinkText("Logout")).Click();
-        test.Driver.Url = "https://localhost:4430";
+        homePage.Logout();
 
-        test.Driver.FindElement(By.LinkText("Login")).Click();
+        homePage.GoToPage();
+        homePage.Login();
 
         loginPage.SetUsername(appUser.UserName);
         loginPage.SetPassword(appUser.Password);
@@ -95,19 +100,18 @@ public class Tests
     public void AddProductToCart()
     {
         // Seleciona um produto
-        test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div[4]/div/div/div/div/div[2]/a")).Click();
+        var product = test.Driver.FindElement(homePage.card4);
+        product.Click();
 
         // Seta a quantidade para 2 e confirma
-        test.Driver.FindElement(By.Id("Count")).SendKeys(Keys.Delete + "2");
-        test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[3]/div[2]/button")).Click();
+        test.Driver.FindElement(productDetailPage.count).SendKeys(Keys.Delete + "2");
+        productDetailPage.SubmitProduct();
 
-        // TODO: refatorar após implementação correta do POM
-        // Clica no ícone do carrinho
-        var ico = test.Driver.FindElement(Home.cartIco);
-        ico.Click();
+        homePage.ShoppingCart();
 
         // Verifica a quantidade
-        var amount = test.Driver.FindElement(By.XPath("/html/body/div/main/form/div/div/div[2]/div[2]/div[4]/span")).Text;
-        Assert.That(amount == "2");
+        var amount = test.Driver.FindElement(cartPage.cartItem);
+        var amountTxt = amount.Text;
+        Assert.That(amountTxt == "2");
     }
 }
