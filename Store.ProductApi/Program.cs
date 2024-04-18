@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration["ProductDB"];
+var connectionString = builder.Configuration["ConnectionStrings:ProductDB"];
 
 builder.Services.AddDbContext<Store.ProductApi.Infrastructure.Context.AppContext>(opt => opt.UseSqlite(connectionString));
 
