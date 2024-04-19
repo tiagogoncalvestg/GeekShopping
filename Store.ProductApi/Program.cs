@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Store.ProductApi.Infrastructure.Config;
 using Store.ProductApi.Infrastructure.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,11 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration["ConnectionStrings:ProductDB"];
 
 builder.Services.AddDbContext<Store.ProductApi.Infrastructure.Context.AppContext>(opt => opt.UseSqlite(connectionString));
+
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+
+builder.Services.AddSingleton(mapper);
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
