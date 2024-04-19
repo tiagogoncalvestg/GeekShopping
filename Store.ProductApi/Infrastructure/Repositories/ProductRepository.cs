@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.ProductApi.Infrastructure.Contracts;
+using Store.ProductApi.Models;
 using Store.ProductApi.Models.Dtos;
 using AppContext = Store.ProductApi.Infrastructure.Context.AppContext;
 
@@ -13,14 +14,45 @@ public class ProductRepository : IProductRepository
     {
         _context = context;
     }
-    public Task<ProductDto> Create(ProductDto productDto)
+    public async Task<ProductDto> Create(ProductDto productDto)
     {
-        throw new NotImplementedException();
+        Product product = new()
+        {
+            Id = productDto.Id,
+            Name = productDto.Name,
+            Price = productDto.Price,
+            Category = productDto.Category,
+            ImageUrl = productDto.ImageUrl,
+            Description = productDto.Description
+        };
+
+        await _context.Products.AddAsync(product);
+        _ = _context.SaveChangesAsync();
+
+        return productDto;
     }
 
-    public Task<bool> Delete(Guid id)
+    public async Task<bool> Delete(Guid id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            ProductDto productDto;
+
+            var product = await _context.Products.FirstOrDefaultAsync(o => o.Id == id);
+            if (product == null)
+                return false;
+            else
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     public async Task<ProductDto> FindById(Guid id)
@@ -31,7 +63,8 @@ public class ProductRepository : IProductRepository
         if (product == null)
             return new();
         else
-            return new(){
+            return new()
+            {
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
@@ -59,11 +92,24 @@ public class ProductRepository : IProductRepository
             });
         }
 
-        return productDtos;        
+        return productDtos;
     }
 
-    public Task<ProductDto> Update(ProductDto productDto)
+    public async Task<ProductDto> Update(ProductDto productDto)
     {
-        throw new NotImplementedException();
+        Product product = new()
+        {
+            Id = productDto.Id,
+            Name = productDto.Name,
+            Price = productDto.Price,
+            Category = productDto.Category,
+            ImageUrl = productDto.ImageUrl,
+            Description = productDto.Description
+        };
+
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
+
+        return productDto;
     }
 }

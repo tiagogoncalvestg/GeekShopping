@@ -1,7 +1,6 @@
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Store.ProductApi.Infrastructure.Config;
-using Store.ProductApi.Infrastructure.Context;
+using Store.ProductApi.Infrastructure.Contracts;
+using Store.ProductApi.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +15,7 @@ var connectionString = builder.Configuration["ConnectionStrings:ProductDB"];
 
 builder.Services.AddDbContext<Store.ProductApi.Infrastructure.Context.AppContext>(opt => opt.UseSqlite(connectionString));
 
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-
-builder.Services.AddSingleton(mapper);
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
