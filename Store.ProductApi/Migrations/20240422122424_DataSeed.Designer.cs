@@ -2,18 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Store.ProductApi.Infrastructure.Context;
-using AppContext = Store.ProductApi.Infrastructure.Context.AppContext;
 
 #nullable disable
 
 namespace Store.ProductApi.Migrations
 {
-    [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(Infrastructure.Context.AppContext))]
+    [Migration("20240422122424_DataSeed")]
+    partial class DataSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
