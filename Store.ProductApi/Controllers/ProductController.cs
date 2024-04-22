@@ -32,4 +32,31 @@ public class ProductController : ControllerBase
 
         return Ok(product);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<ProductDto>> Create(ProductDto productDto)
+    {
+        if (productDto == null) NotFound();
+        var product = await _repository.Create(productDto);
+
+        return Ok(product);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<ProductDto>> Update(ProductDto productDto)
+    {
+        if (productDto == null) NotFound();
+        var product = await _repository.Update(productDto);
+
+        return Ok(product);
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var status = await _repository.Delete(id);
+        if (status == false) return NotFound();
+
+        return Ok(status);
+    }
 }
