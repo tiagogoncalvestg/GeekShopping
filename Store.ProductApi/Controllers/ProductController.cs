@@ -34,7 +34,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProductDto>> Create(ProductDto productDto)
+    public async Task<ActionResult<ProductDto>> Create([FromBody] ProductDto productDto)
     {
         if (productDto == null) NotFound();
         var product = await _repository.Create(productDto);
@@ -43,7 +43,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult<ProductDto>> Update(ProductDto productDto)
+    public async Task<ActionResult<ProductDto>> Update([FromBody] ProductDto productDto)
     {
         if (productDto == null) NotFound();
         var product = await _repository.Update(productDto);
