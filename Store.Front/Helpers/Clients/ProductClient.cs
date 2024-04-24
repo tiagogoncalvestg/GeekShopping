@@ -35,7 +35,6 @@ public partial class ProductClient
     public ProductClient(System.Net.Http.HttpClient httpClient)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
-        // TODO: Adicionar objeto de valor para validar a url dev e prd
         BaseUrl = "https://localhost:5000";
         _httpClient = httpClient;
     }
@@ -68,7 +67,7 @@ public partial class ProductClient
 
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductDto>> ProductAllAsync()
+    public virtual System.Threading.Tasks.Task<System.Collections.Generic.List<ProductDto>> ProductAllAsync()
     {
         return ProductAllAsync(System.Threading.CancellationToken.None);
     }
@@ -76,7 +75,7 @@ public partial class ProductClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="ApiException">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductDto>> ProductAllAsync(System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<ProductDto>> ProductAllAsync(System.Threading.CancellationToken cancellationToken)
     {
         var client_ = _httpClient;
         var disposeClient_ = false;
@@ -117,7 +116,7 @@ public partial class ProductClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProductDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.List<ProductDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -638,10 +637,10 @@ public partial class ApiException<TResult> : ApiException
     }
 }
 
-#pragma warning restore  108
-#pragma warning restore  114
-#pragma warning restore  472
-#pragma warning restore  612
+#pragma warning restore 108
+#pragma warning restore 114
+#pragma warning restore 472
+#pragma warning restore 612
 #pragma warning restore 1573
 #pragma warning restore 1591
 #pragma warning restore 8073
@@ -649,4 +648,3 @@ public partial class ApiException<TResult> : ApiException
 #pragma warning restore 8603
 #pragma warning restore 8604
 #pragma warning restore 8625
-
