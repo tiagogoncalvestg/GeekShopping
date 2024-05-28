@@ -1,0 +1,25 @@
+﻿@page "{productId}"
+@model Store.Front.Areas.Product.Pages.DetailModel
+@{
+}
+
+<div class="d-flex justify-content-center">
+    <div class="card border" style="width: 500px;">
+        <img class="card-img-top" style="" src="@Model.Product.ImageUrl" alt="Card image cap">
+        <div class="card-body pb-3">
+            <div class="d-flex justify-content-between pt-3 pb-3" style="border-top:1px solid black;border-bottom:1px solid black">
+                <div class="d-flex" style="flex-direction:row">
+                    <span class="" style="display:inline-block;padding:8px 0 0;margin-right:5px">Quantidade</span>
+
+                    @* TODO: Implementar o envio da quantidade ao carrinho *@
+                    <input style="width:60px;margin-right:10px;padding:5px 2px 5px 12px" class="form-control" type="number" min="1" max="99" value="1" />
+                    @* END------------------------------------------------ *@
+
+                </div>
+                <a href="#" class="btn btn-primary">Adicionar ao carrinho</a>
+            </div>
+            <h5 class="card-title mt-3">@Model.Product.Name</h5>
+            <p class="card-text">@Model.Product.Description</p>
+        </div>
+    </div>
+</div>

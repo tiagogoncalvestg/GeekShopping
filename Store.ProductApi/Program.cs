@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using Store.ProductApi.Contracts.RabbitMQSender;
 using Store.ProductApi.Infrastructure.Contracts;
 using Store.ProductApi.Infrastructure.Repositories;
+using Store.ProductApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>(); 
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

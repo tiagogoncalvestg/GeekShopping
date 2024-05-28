@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Store.ProductApi.Contracts.RabbitMQSender;
 using Store.ProductApi.Infrastructure.Contracts;
 using Store.ProductApi.Models.Dtos;
 
@@ -9,17 +10,19 @@ namespace Store.ProductApi.Controllers;
 public class ProductController : ControllerBase
 {
     private IProductRepository _repository;
+    private IRabbitMQMessageSender _messageSender;
 
-    public ProductController(IProductRepository repository)
+    public ProductController(IProductRepository repository, IRabbitMQMessageSender messageSender)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _messageSender = messageSender ?? throw new ArgumentNullException( nameof(messageSender));
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
     {
         var products = await _repository.GetAll();
-        if (products == null) NotFound();
+        if (products == null) NotFound();        
 
         return Ok(products);
     }
@@ -29,6 +32,9 @@ public class ProductController : ControllerBase
     {
         var product = await _repository.FindById(id);
         if (product == null) NotFound();
+        
+        // Run RMQ image on docker**********
+        //_messageSender.SendMessage(product, "product.queue");
 
         return Ok(product);
     }

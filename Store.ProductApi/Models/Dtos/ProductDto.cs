@@ -1,6 +1,8 @@
-﻿namespace Store.ProductApi.Models.Dtos;
+﻿using Store.RMQ.Models;
 
-public class ProductDto
+namespace Store.ProductApi.Models.Dtos;
+
+public class ProductDto : BaseMessage
 {
     public Guid Id { get; set; }
     public string? Name { get; set; }
