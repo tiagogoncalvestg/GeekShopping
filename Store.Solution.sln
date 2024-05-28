@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.RMQ", "Store.Library.RMQ\Store.RMQ.csproj", "{DB5E2F8B-0351-4D06-B10E-B2EA2BCC5D8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.CartApi", "Store.CartApi\Store.CartApi.csproj", "{DC6336AB-2F52-4D28-991C-2301CED1F474}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DB5E2F8B-0351-4D06-B10E-B2EA2BCC5D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB5E2F8B-0351-4D06-B10E-B2EA2BCC5D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB5E2F8B-0351-4D06-B10E-B2EA2BCC5D8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC6336AB-2F52-4D28-991C-2301CED1F474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC6336AB-2F52-4D28-991C-2301CED1F474}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC6336AB-2F52-4D28-991C-2301CED1F474}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC6336AB-2F52-4D28-991C-2301CED1F474}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{E6074E66-4E2C-4613-8DBF-95F78277152A} = {B8430F34-A703-401A-9CA5-8F0E71FEADA9}
 		{60493037-CFFA-466E-8A01-783FBBD6B866} = {2A02930F-88DE-44A5-B0D9-EB3BC51CBD49}
 		{DB5E2F8B-0351-4D06-B10E-B2EA2BCC5D8E} = {0EA34615-8886-4E1F-97BA-0566D72A963E}
+		{DC6336AB-2F52-4D28-991C-2301CED1F474} = {2A02930F-88DE-44A5-B0D9-EB3BC51CBD49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {39BA1D1F-942C-4467-9606-BC7394489A19}
