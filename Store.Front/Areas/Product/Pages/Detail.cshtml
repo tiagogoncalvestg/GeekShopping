@@ -6,8 +6,12 @@
 <div class="d-flex justify-content-center">
     <div class="card border" style="width: 500px;">
         <img class="card-img-top" style="" src="@Model.Product.ImageUrl" alt="Card image cap">
-        <div class="card-body pb-3">
-            <div class="d-flex justify-content-between pt-3 pb-3" style="border-top:1px solid black;border-bottom:1px solid black">
+        <div class="p-3">
+            <h3 class="card-title text-success">@Model.Product.Name</h3>
+        </div>
+
+        <div class="card-body pb-2">
+            <div class="d-flex justify-content-between pt-3 pb-3 mb-3" style="border-bottom:1px solid black">
                 <div class="d-flex" style="flex-direction:row">
                     <span class="" style="display:inline-block;padding:8px 0 0;margin-right:5px">Quantidade</span>
 
@@ -16,10 +20,20 @@
                     @* END------------------------------------------------ *@
 
                 </div>
-                <a href="#" class="btn btn-primary">Adicionar ao carrinho</a>
+                <p class="card-title text-success pt-3" style="padding-right:24px"><b>@Model.Product.Price.ToString("c")</b></p>
             </div>
+            <p class="text-end">
+                <button type="submit" href="#" class="btn btn-primary">Adicionar ao carrinho</button>
+            </p>
+        </div>
+    </div>
+
+    <div class="card border" style="width: 500px;flex-direction:column">
+
+        <div class="card-body pb-3">
             <h5 class="card-title mt-3">@Model.Product.Name</h5>
             <p class="card-text">@Model.Product.Description</p>
         </div>
     </div>
+
 </div>

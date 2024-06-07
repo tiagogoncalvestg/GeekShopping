@@ -9,19 +9,23 @@
     @foreach (var product in Model.Products ?? new())
     {
         <div class="col-3">
-            <div class="p-0 my-3 border">
+            <div class="p-0 my-3 border" style="">
                 <div class="card">
                     <img src="@product.ImageUrl" class="card-img-top">
                     <div class="card-body">
-                        <h3 class="card-title text-success">@product.Name</h3>
-                        <span class="badge badge-light mb-2">@product.Category</span>
-                        <p class="card-text">@product.Description</p>
+                        <div style="height:100px;overflow:hidden">
+                            <h3 class="card-title text-success">@product.Name</h3>
+                        </div>
+                        <span class="badge text-dark mb-2">@product.Category</span>
+                        <div style="height:300px;overflow:scroll;">
+                            <p class="card-text">@product.Description</p>
+                        </div>
 
                         <div class="row">
                             <div class="col pt-1">
                                 <span style="font-size:23px;">@product.Price</span>
                             </div>
-                            <div class="col">
+                            <div class="col mt-3">
                                 <a asp-area="Product" asp-page="Detail" asp-route-productId="@product.Id.ToString()"
                                    class="btn btn-success form-control">Detailhe</a>
                             </div>
